@@ -131,7 +131,39 @@ def convolve_array_edges(arr, radius):
     return left, right
 
 
-__all__ = ["moving_average"]
+def round_number(number, round=5):
+    """
+
+    Args:
+        number:
+        round:
+
+    Returns:
+
+    """
+    power = round - 2
+    rnd = 0
+    num = None
+
+    while power >= 0:
+        high = 10 ** power
+        if number >= high:
+            num = np.round(number, rnd)
+            break
+
+        power -= 1
+        rnd += 1
+
+    if num is None:
+        num = np.round(number, round - 2)
+
+    if rnd == 0:
+        num = int(num)
+
+    return num
+
+
+__all__ = ["moving_average", "round_number"]
 
 if __name__ == "__main__":
     pass
