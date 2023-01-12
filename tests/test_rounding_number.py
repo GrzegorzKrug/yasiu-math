@@ -1,7 +1,7 @@
 import numpy as np
 import pytest
 
-from yasiu.math import round_number
+from yasiu_math.math import round_number
 
 
 num_list = np.linspace(0, 9.55553222, 150)

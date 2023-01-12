@@ -1,5 +1,5 @@
 from setuptools import setup
-from yasiu import VERSION
+from yasiu_math import VERSION
 
 
 project_urls = {
@@ -48,7 +48,7 @@ install_requires = [
 ]
 
 setup(
-        name='yasiu.math',
+        name='yasiu-math',
         version=".".join([str(num) for num in VERSION]),
         author=author,
         author_email=author_email,

@@ -13,7 +13,7 @@ pip install yasiu.math
 ### Import:
 
 ```py
-from yasiu.math import moving_average
+from yasiu_math.math import moving_average
 ```
 
 ### Use example:
