@@ -59,12 +59,14 @@ def moving_average(array, radius=1, padding="try", kernel_type="avg", kernel_exp
         kernel = np.concatenate([kernel[:-1], np.flip(kernel)])
         kernel = kernel / kernel.sum()
 
-    else:
+    elif kernel_type == 'exp':
         "Exponential"
         kernel = np.arange(radius + 1) + 1
         kernel = np.concatenate([kernel[:-1], np.flip(kernel)])
         kernel = kernel ** kernel_exp
         kernel = kernel / kernel.sum()
+    else:
+        raise KeyError(f"Invalid kernel_type{kernel_type}. Use one: exp,linear,avg.")
 
     if padding == "same":
         out = convolve(array, kernel, 'same')
@@ -88,9 +90,11 @@ def moving_average(array, radius=1, padding="try", kernel_type="avg", kernel_exp
     elif padding == "full":
         out = convolve(array, kernel, 'full')
 
-    else:
+    elif padding == 'valid':
         "valid"
         out = convolve(array, kernel, 'valid')
+    else:
+        raise KeyError(f"Invalid padding key:{padding}. Use one: valid,same,try,keep.")
 
     # posx[:smoothing_frames] = tempx[:smoothing_frames]
     return out
