@@ -33,7 +33,9 @@ def round_number(number, round=5):
     return num
 
 
-__all__ = ["round_number"]
+__all__ = [
+    "round_number"
+]
 
 if __name__ == "__main__":
     num = 3.3535123

@@ -7,13 +7,14 @@ Module with useful math functions that are missing in numpy or scipy.
 ```shell
 pip install yasiu-math
 ```
-
-## Moving average
+## Submodules
+- `convolve` - Convolution functions
+<!-- - `math` - General math functions -->
 
 ### Import:
 
 ```py
-from yasiu_math.math import moving_average
+from yasiu.math.convolve import moving_average
 ```
 
 ### Use example:
