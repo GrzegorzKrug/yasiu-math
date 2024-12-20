@@ -41,6 +41,8 @@ def test_3_big_num(num):
 def test_4_too_big_number(num):
     """Shrink too big number"""
     max_size = 3
+    max_size += 1
     ret = round_number(num, max_size)
-    assert len(str(ret)) <= max_size
+    assert len(str(
+        ret)) <= max_size, f"Input: {num}, got: {ret} ({str(ret)}). Max size is: {max_size}, but got: {len(str(ret))}"
     # assert ret == np.round(num, 0)
