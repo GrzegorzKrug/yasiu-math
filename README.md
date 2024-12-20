@@ -11,17 +11,17 @@ pip install yasiu-math
 - `convolve` - Convolution functions
 <!-- - `math` - General math functions -->
 
-### Import:
-
-```py
-from yasiu.math.convolve import moving_average
-```
-
 ### Use example:
 
 ```py
+from yasiu.math.convolve import moving_average
+
 moving_average(Union[list, "1d np array"], radius=1, padding="try", kernel_type="avg", kernel_exp=2)
 ```
+
+#### Example
+
+![picure](./pics/convolveComparison.png)
 
 # All packages
 

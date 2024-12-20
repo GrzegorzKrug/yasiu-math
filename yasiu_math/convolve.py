@@ -1,11 +1,11 @@
-import numpy as np
+import numpy as _np
 
-from scipy.signal import convolve
+from scipy.signal import convolve as _convolve
 
 
 def moving_average(array, radius=1, padding="try", kernel_type="avg", kernel_exp=2):
     """
-    Rolling Average with edge treatment.
+    Rolling average function with edge treatment.
 
     :param array: list or 1d np.ndarray
 
@@ -16,32 +16,32 @@ def moving_average(array, radius=1, padding="try", kernel_type="avg", kernel_exp
     :param padding: str
     :type padding: str
 
-    Padding - str
-     full - extends results to padded numbers
+    padding: str
+        try - calculates number using every value it has without padding
 
-     same - calculates average for every number, uses 0 vals
+        full - extends results to padded numbers
 
-     valid- returns only average number that have full frame of values
+        same - calculates average for every number, uses 0 vals
 
-     try - calculates number using every value it has without padding
+        valid- returns only average number that have full frame of values
 
-     keep - keep raw values that can not be calculated
+        keep - keep raw values that can not be calculated
 
     :param kernel_type:
     kernel_type: str
         avg - all values have equal weight (blurred image)
 
         linear - linear weights, same as exp type, with `exponent weight = 1`
-         example weights before norm:
-          [1, 2, 3, 2, 1]
+            example weights before norm:
+            [1, 2, 3, 2, 1]
 
         exp - raising weight to given power in `kernel_exp` variable
-         example weights before norm with kernel_exp = 2:
-          [1, 4, 9, 4, 1]
+            example weights before norm with kernel_exp = 2:
+            [1, 4, 9, 4, 1]
 
     :param kernel_exp:
-    kernel_exp - float, must be in range <0, inf>
-     non linearity exponent before normalization
+    kernel_exp : float, must be in range <0, inf>
+     Non linearity exponent, before normalization
      only for `kernel_type='exp'`
      kernel_value ^ exponent
 
@@ -53,17 +53,17 @@ def moving_average(array, radius=1, padding="try", kernel_type="avg", kernel_exp
         return array
 
     if kernel_type == "avg":
-        kernel = np.ones(smoothing_frames) / smoothing_frames
+        kernel = _np.ones(smoothing_frames) / smoothing_frames
 
     elif kernel_type == "linear":
-        kernel = np.arange(radius + 1) + 1
-        kernel = np.concatenate([kernel[:-1], np.flip(kernel)])
+        kernel = _np.arange(radius + 1) + 1
+        kernel = _np.concatenate([kernel[:-1], _np.flip(kernel)])
         kernel = kernel / kernel.sum()
 
     elif kernel_type == 'exp':
         "Exponential"
-        kernel = np.arange(radius + 1) + 1
-        kernel = np.concatenate([kernel[:-1], np.flip(kernel)])
+        kernel = _np.arange(radius + 1) + 1
+        kernel = _np.concatenate([kernel[:-1], _np.flip(kernel)])
         kernel = kernel ** kernel_exp
         kernel = kernel / kernel.sum()
     else:
@@ -71,10 +71,10 @@ def moving_average(array, radius=1, padding="try", kernel_type="avg", kernel_exp
             f"Invalid kernel_type{kernel_type}. Use one: exp,linear,avg.")
 
     if padding == "same":
-        out = convolve(array, kernel, 'same')
+        out = _convolve(array, kernel, 'same')
 
     elif padding == "try" or padding == 'keep':
-        out = convolve(array, kernel, 'valid')
+        out = _convolve(array, kernel, 'valid')
 
         if padding == "try":
             left, right = convolve_array_edges(array, radius)
@@ -87,14 +87,14 @@ def moving_average(array, radius=1, padding="try", kernel_type="avg", kernel_exp
             right = array[-radius:]
             # print(len(left), len(out), len(right))
 
-        out = np.concatenate([left, out, right])
+        out = _np.concatenate([left, out, right])
 
     elif padding == "full":
-        out = convolve(array, kernel, 'full')
+        out = _convolve(array, kernel, 'full')
 
     elif padding == 'valid':
         "valid"
-        out = convolve(array, kernel, 'valid')
+        out = _convolve(array, kernel, 'valid')
     else:
         raise KeyError(
             f"Invalid padding key:{padding}. Use one: valid,same,try,keep.")
@@ -120,8 +120,8 @@ def convolve_array_edges(arr, radius):
     """
     # size = 1 + 2 * abs(radius)
 
-    left = np.zeros(radius)
-    right = np.zeros(radius)
+    left = _np.zeros(radius)
+    right = _np.zeros(radius)
 
     if radius > 0:
         csum = 0
@@ -144,4 +144,54 @@ __all__ = [
 ]
 
 if __name__ == "__main__":
-    pass
+    import matplotlib.pyplot as plt
+    from matplotlib.style import use
+    import os
+
+    use("ggplot")
+
+    arr = _np.arange(40).reshape(-1, 2).T/20
+    arr = arr.ravel()
+    noise = _np.sin(arr*8)/10
+    arr += noise
+    radius = 5
+
+    plt.figure(figsize=(7, 5), dpi=150)
+    plt.subplot(2, 1, 1)
+    plt.title("Edge handling comparison")
+    plt.plot(arr, label="True value", linewidth=3, alpha=0.5)
+
+    smooth1 = moving_average(arr, radius=radius)
+    plt.plot(smooth1, label="Smoothing: default")
+
+    smooth1 = moving_average(arr, radius=radius, padding='keep')
+    plt.plot(smooth1, label="Smoothing: keep")
+
+    smooth1 = moving_average(arr, radius=radius, padding='same')
+    plt.plot(smooth1, label="Smoothing: same (padding 0)")
+
+    plt.legend(loc='lower right', prop={'size': 6})
+    plt.tight_layout()
+    plt.subplot(2, 1, 2)
+    plt.title("Sample weight comparison")
+    plt.plot(arr, label="True value", linewidth=3, alpha=0.5)
+
+    smooth1 = moving_average(arr, radius=radius)
+    plt.plot(smooth1, label="Smoothing weights: equal")
+
+    smooth1 = moving_average(arr, radius=radius, kernel_type='linear')
+    plt.plot(smooth1, label="Smoothing weights: linear")
+
+    smooth1 = moving_average(arr, radius=radius, kernel_type='exp')
+    plt.plot(smooth1, label="Smoothing weights: exponential (2)")
+
+    smooth1 = moving_average(
+        arr, radius=radius, kernel_type='exp', kernel_exp=4)
+    plt.plot(smooth1, label="Smoothing weights: exponential (4)")
+
+    plt.suptitle(f"Smoothing signal with window size: {2*radius+1}")
+    plt.legend(loc='lower right', prop={'size': 6})
+    plt.tight_layout()
+    plt.savefig(os.path.join(os.path.dirname(
+        __file__), "..", "pics", "convolveComparison.png"))
+    # plt.show()
