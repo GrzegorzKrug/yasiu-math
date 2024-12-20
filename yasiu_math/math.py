@@ -3,6 +3,7 @@ import numpy as np
 
 def round_number(number, round=5):
     """
+    Round number to fit number in character limit.
 
     Args:
         number:
