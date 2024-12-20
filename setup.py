@@ -71,8 +71,8 @@ setup(
     # setup_requires=install_requires,
 
     package_dir={
-        "main": "yasiu_math",
-        "test": "tests",
+        "yasiu_math": "yasiu_math",
+        "tests": "tests",
     }
 
 )
