@@ -2,8 +2,6 @@ name: Publish Python Package
 
 on:
   push:
-    branches:
-      - main
     tags:
       - 'v*'
       - 'V*'
@@ -33,6 +31,7 @@ jobs:
       - name: Run tests
         run: |
           python -m pip install pytest
+          python -m pip install -r requirements.txt
           python -m pip install -e .
           pytest tests
 
