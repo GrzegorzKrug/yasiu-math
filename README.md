@@ -2,14 +2,13 @@
 
 Module with useful math functions that are missing in numpy or scipy.
 
-## Installation
+# Installation
 
 ```shell
 pip install yasiu-math
 ```
-## Submodules
+# Modules list
 - `convolve` - Convolution functions
-<!-- - `math` - General math functions -->
 
 ### Use example:
 
@@ -21,7 +20,7 @@ moving_average(Union[list, "1d np array"], radius=1, padding="try", kernel_type=
 
 #### Example
 
-![picure](./pics/convolveComparison.png)
+![picure](https://raw.githubusercontent.com/GrzegorzKrug/yasiu-math/refs/heads/main/pics/convolveComparison.png)
 
 # All packages
 
@@ -31,4 +30,4 @@ moving_average(Union[list, "1d np array"], radius=1, padding="try", kernel_type=
 
 [3. Image Package](https://pypi.org/project/yasiu-image/)
 
-[4. Pyplot visualisation Package](https://pypi.org/project/yasiu-vis/)
+[4. Visualisation Package](https://pypi.org/project/yasiu-vis/)
